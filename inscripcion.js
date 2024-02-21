@@ -23,7 +23,7 @@ Vue.component('componente-inscripcions', {
             this.listar();
         },
         eliminarInscripcion(idInscripcion){
-            if( confirm(`Esta seguro de elimina el inscrito?`) ){
+            if( confirm(`Esta seguro de eliminar la materia inscrita?`) ){
                 let store = abrirStore('inscripcions', 'readwrite'),
                 query = store.delete(idInscripcion);
             query.onsuccess = e=>{
@@ -163,7 +163,7 @@ Vue.component('componente-inscripcions', {
                                         <td>{{inscripcion.nombre}}</td>
                                         <td>{{inscripcion.carrera}}</td>
                                         <td>{{inscripcion.cantidad_m}}</td>
-                                        <td><button @click.prevent.default="eliminarInscripcion(inscripcion.idInscripcion)" class="btn btn-danger">del</button></td>
+                                        <td><button @click.prevent.default="eliminarInscripcion(inscripcion.idInscripcion)" class="btn btn-danger">Eliminar</button></td>
                                     </tr>
                                 </tbody>
                             </table>

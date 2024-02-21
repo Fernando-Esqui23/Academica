@@ -31,7 +31,7 @@ Vue.component('componente-alumnos', {
             this.listar();
         },
         eliminarAlumno(idAlumno){
-            if( confirm(`Esta seguro de elimina el alumno?`) ){
+            if( confirm(`Esta seguro de eliminar el alumno?`) ){
                 let store = abrirStore('alumnos', 'readwrite'),
                 query = store.delete(idAlumno);
             query.onsuccess = e=>{
@@ -44,22 +44,29 @@ Vue.component('componente-alumnos', {
             this.accion = 'modificar';
             this.alumno = alumno;
         },
-        guardarAlumno(){
-            //almacenamiento del objeto alumnos en indexedDB
-            if( this.alumno.matricula.id=='' ||
-                this.alumno.matricula.label=='' ){
-                console.error("Por favor seleccione una categoria");
+        guardarAlumno() {
+            
+            let codigoExistente = this.alumnos.some(al => al.codigo === this.alumno.matricula.label);
+
+            if (codigoExistente) {
+                
+                alert('Error: El código de matrícula ya existe.');
+                return;
+            }
+
+            if (this.alumno.matricula.id === '' || this.alumno.matricula.label === '') {
+                console.error("Por favor seleccione una categoría");
                 return;
             }
             this.alumno.codigo = this.alumno.matricula.label;
             let store = abrirStore('alumnos', 'readwrite'),
-                query = store.put({...this.alumno});
-            query.onsuccess = e=>{
+                query = store.put({ ...this.alumno });
+            query.onsuccess = e => {
                 this.nuevoAlumno();
                 this.listar();
             };
-            query.onerror = e=>{
-                console.error('Error al guardar en alumnos', e.message());
+            query.onerror = e => {
+                console.error('Error al guardar en alumnos', e.message);
             };
         },
         nuevoAlumno(){
@@ -266,7 +273,7 @@ Vue.component('componente-alumnos', {
                                         <td>{{alumno.telefono}}</td>
                                         <td>{{alumno.carrera}}</td>
                                         <td>{{alumno.correo}}</td>
-                                        <td><button @click.prevent.default="eliminarAlumno(alumno.idAlumno)" class="btn btn-danger">del</button></td>
+                                        <td><button @click.prevent.default="eliminarAlumno(alumno.idAlumno)" class="btn btn-danger">eliminar</button></td>
                                     </tr>
                                 </tbody>
                             </table>

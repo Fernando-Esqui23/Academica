@@ -21,7 +21,7 @@ Vue.component('componente-matriculas', {
             this.listar();
         },
         eliminarMatricula(idMatricula){
-            if( confirm(`Esta seguro de elimina el matricula?`) ){
+            if( confirm(`Esta seguro de eliminar la matricula?`) ){
                 let store = abrirStore('matriculas', 'readwrite'),
                 query = store.delete(idMatricula);
             query.onsuccess = e=>{
@@ -34,16 +34,25 @@ Vue.component('componente-matriculas', {
             this.accion = 'modificar';
             this.matricula = matricula;
         },
-        guardarMatricula(){
-            //almacenamiento del objeto Matriculas en indexedDB
+        guardarMatricula() {
+            
+            let codigoExistente = this.matriculas.some(mat => mat.codigo === this.matricula.codigo);
+
+            if (codigoExistente) {
+                
+                alert('Error: El código de matrícula ya existe.');
+                return;
+            }
+
+            
             let store = abrirStore('matriculas', 'readwrite'),
-                query = store.put({...this.matricula});
-            query.onsuccess = e=>{
+                query = store.put({ ...this.matricula });
+            query.onsuccess = e => {
                 this.nuevoMatricula();
                 this.listar();
             };
-            query.onerror = e=>{
-                console.error('Error al guardar en matriculas', e.message());
+            query.onerror = e => {
+                console.error('Error al guardar en matriculas', e.message);
             };
         },
         nuevoMatricula(){
